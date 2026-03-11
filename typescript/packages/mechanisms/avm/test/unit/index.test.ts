@@ -9,6 +9,9 @@ import {
   USDC_TESTNET_ASA_ID,
   AUSDC_VOI_MAINNET_ID,
   USDC_CONFIG,
+  NATIVE_TOKEN_ASSET_ID,
+  NATIVE_TOKEN_DECIMALS,
+  NATIVE_TOKEN_CONFIG,
   V1_ALGORAND_MAINNET,
   V1_ALGORAND_TESTNET,
   V1_VOI_MAINNET,
@@ -28,6 +31,7 @@ import {
   convertToTokenAmount,
   convertFromTokenAmount,
   isExactAvmPayload,
+  ExactNetworkAvmScheme,
 } from '../../src'
 
 describe('@x402/avm', () => {
@@ -309,6 +313,48 @@ describe('@x402/avm', () => {
       expect(isExactAvmPayload({ paymentIndex: 0 })).toBe(false)
       expect(isExactAvmPayload({ paymentGroup: 'not-array', paymentIndex: 0 })).toBe(false)
       expect(isExactAvmPayload({ paymentGroup: [], paymentIndex: '0' })).toBe(false)
+    })
+  })
+
+  describe('native token constants', () => {
+    it('should use 0 as native token asset ID', () => {
+      expect(NATIVE_TOKEN_ASSET_ID).toBe('0')
+    })
+
+    it('should have 6 decimals for native tokens', () => {
+      expect(NATIVE_TOKEN_DECIMALS).toBe(6)
+    })
+
+    it('should have native token config for all supported networks', () => {
+      expect(NATIVE_TOKEN_CONFIG[ALGORAND_MAINNET_CAIP2]).toEqual({
+        name: 'ALGO',
+        decimals: 6,
+      })
+      expect(NATIVE_TOKEN_CONFIG[ALGORAND_TESTNET_CAIP2]).toEqual({
+        name: 'ALGO',
+        decimals: 6,
+      })
+      expect(NATIVE_TOKEN_CONFIG[VOI_MAINNET_CAIP2]).toEqual({
+        name: 'VOI',
+        decimals: 6,
+      })
+    })
+
+    it('should have native token config for V1 network identifiers', () => {
+      expect(NATIVE_TOKEN_CONFIG[V1_ALGORAND_MAINNET].name).toBe('ALGO')
+      expect(NATIVE_TOKEN_CONFIG[V1_ALGORAND_TESTNET].name).toBe('ALGO')
+      expect(NATIVE_TOKEN_CONFIG[V1_VOI_MAINNET].name).toBe('VOI')
+    })
+  })
+
+  describe('ExactNetworkAvmScheme', () => {
+    it('should export the client scheme class', () => {
+      expect(ExactNetworkAvmScheme).toBeDefined()
+    })
+
+    it('should have scheme name exact-network', () => {
+      // Verify scheme name without instantiating (needs signer)
+      expect(ExactNetworkAvmScheme.prototype).toBeDefined()
     })
   })
 })

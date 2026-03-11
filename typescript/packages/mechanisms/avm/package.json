@@ -21,7 +21,8 @@
     "payment",
     "protocol",
     "avm",
-    "algorand"
+    "algorand",
+    "voi"
   ],
   "license": "Apache-2.0",
   "author": "GoPlausible",
@@ -117,6 +118,36 @@
       "require": {
         "types": "./dist/cjs/exact/v1/facilitator/index.d.ts",
         "default": "./dist/cjs/exact/v1/facilitator/index.js"
+      }
+    },
+    "./exact-network/client": {
+      "import": {
+        "types": "./dist/esm/exact-network/client/index.d.mts",
+        "default": "./dist/esm/exact-network/client/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/exact-network/client/index.d.ts",
+        "default": "./dist/cjs/exact-network/client/index.js"
+      }
+    },
+    "./exact-network/server": {
+      "import": {
+        "types": "./dist/esm/exact-network/server/index.d.mts",
+        "default": "./dist/esm/exact-network/server/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/exact-network/server/index.d.ts",
+        "default": "./dist/cjs/exact-network/server/index.js"
+      }
+    },
+    "./exact-network/facilitator": {
+      "import": {
+        "types": "./dist/esm/exact-network/facilitator/index.d.mts",
+        "default": "./dist/esm/exact-network/facilitator/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/exact-network/facilitator/index.d.ts",
+        "default": "./dist/cjs/exact-network/facilitator/index.js"
       }
     }
   },

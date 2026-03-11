@@ -9,6 +9,9 @@ const baseConfig = {
     'exact/facilitator/index': 'src/exact/facilitator/index.ts',
     'exact/v1/client/index': 'src/exact/v1/client/index.ts',
     'exact/v1/facilitator/index': 'src/exact/v1/facilitator/index.ts',
+    'exact-network/client/index': 'src/exact-network/client/index.ts',
+    'exact-network/server/index': 'src/exact-network/server/index.ts',
+    'exact-network/facilitator/index': 'src/exact-network/facilitator/index.ts',
   },
   dts: {
     resolve: true,
