@@ -184,6 +184,36 @@ export const USDC_CONFIG: Record<string, { asaId: string; name: string; decimals
 }
 
 // ============================================================================
+// Native Token Configuration
+//
+// Used by the exact-network scheme for payments in ALGO / VOI.
+// ============================================================================
+
+/**
+ * Conventional asset identifier for native tokens in PaymentRequirements.
+ * Native tokens don't have an ASA ID; '0' is used as a sentinel value.
+ */
+export const NATIVE_TOKEN_ASSET_ID = '0'
+
+/**
+ * Native token decimals (6 for both ALGO and VOI — amounts are in micro-units)
+ */
+export const NATIVE_TOKEN_DECIMALS = 6
+
+/**
+ * Native token configuration per network.
+ * Maps both CAIP-2 and V1 network identifiers to the native token metadata.
+ */
+export const NATIVE_TOKEN_CONFIG: Record<string, { name: string; decimals: number }> = {
+  [ALGORAND_MAINNET_CAIP2]: { name: 'ALGO', decimals: NATIVE_TOKEN_DECIMALS },
+  [ALGORAND_TESTNET_CAIP2]: { name: 'ALGO', decimals: NATIVE_TOKEN_DECIMALS },
+  [VOI_MAINNET_CAIP2]: { name: 'VOI', decimals: NATIVE_TOKEN_DECIMALS },
+  [V1_ALGORAND_MAINNET]: { name: 'ALGO', decimals: NATIVE_TOKEN_DECIMALS },
+  [V1_ALGORAND_TESTNET]: { name: 'ALGO', decimals: NATIVE_TOKEN_DECIMALS },
+  [V1_VOI_MAINNET]: { name: 'VOI', decimals: NATIVE_TOKEN_DECIMALS },
+}
+
+// ============================================================================
 // Algod API Endpoints
 // ============================================================================
 

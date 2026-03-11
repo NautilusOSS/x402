@@ -19,8 +19,11 @@
  * ```
  */
 
-// Exact scheme client
+// Exact scheme client (ASA transfers)
 export { ExactAvmScheme } from './exact'
+
+// Exact-network scheme client (native token transfers)
+export { ExactNetworkAvmScheme } from './exact-network'
 
 // Signer helpers and interfaces
 export {
@@ -78,6 +81,10 @@ export {
   AUSDC_VOI_MAINNET_ID,
   USDC_DECIMALS,
   USDC_CONFIG,
+  // Native Token Configuration
+  NATIVE_TOKEN_ASSET_ID,
+  NATIVE_TOKEN_DECIMALS,
+  NATIVE_TOKEN_CONFIG,
   // Algod Endpoints
   DEFAULT_ALGOD_MAINNET,
   DEFAULT_ALGOD_TESTNET,
