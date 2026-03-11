@@ -51,8 +51,9 @@ export function registerExactAvmScheme(
       server.register(network, scheme)
     })
   } else {
-    // Register wildcard for all Algorand networks
+    // Register wildcard for all AVM-compatible networks
     server.register('algorand:*', scheme)
+    server.register('voi:*', scheme)
   }
 
   return server

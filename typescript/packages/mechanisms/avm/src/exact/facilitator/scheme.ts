@@ -24,7 +24,7 @@ import type {
 import type { FacilitatorAvmSigner } from '../../signer'
 import type { ExactAvmPayloadV2 } from '../../types'
 import { isExactAvmPayload } from '../../types'
-import { decodeTransaction, hasSignature } from '../../utils'
+import { decodeTransaction, hasSignature, extractGenesisHashFromCaip2 } from '../../utils'
 import { MAX_ATOMIC_GROUP_SIZE, MAX_REASONABLE_FEE } from '../../constants'
 
 /**
@@ -145,10 +145,10 @@ export class ExactAvmScheme implements SchemeNetworkFacilitator {
     const paymentTxn = decoded.txns[paymentIndex].txn
     const payer = paymentTxn.sender.toString()
 
-    // Validate genesis hash matches network
+    // Validate genesis hash matches network (works for any AVM namespace: algorand, voi)
     const networkStr = String(requirements.network)
-    if (networkStr.startsWith('algorand:')) {
-      const expectedGenesisHash = networkStr.slice('algorand:'.length)
+    const expectedGenesisHash = extractGenesisHashFromCaip2(networkStr)
+    if (expectedGenesisHash) {
       for (const stxn of decoded.txns) {
         const txnGenesisHash = stxn.txn.genesisHash
           ? Buffer.from(stxn.txn.genesisHash).toString('base64')

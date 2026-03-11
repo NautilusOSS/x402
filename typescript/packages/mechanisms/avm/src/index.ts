@@ -1,7 +1,8 @@
 /**
- * @module @x402/avm - x402 Payment Protocol AVM (Algorand) Implementation
+ * @module @x402/avm - x402 Payment Protocol AVM Implementation
  *
- * This module provides the Algorand-specific implementation of the x402 payment protocol.
+ * This module provides the AVM-specific implementation of the x402 payment protocol.
+ * Supports all AVM-compatible networks: Algorand (mainnet/testnet) and Voi (mainnet).
  *
  * @example Client signer:
  * ```typescript
@@ -43,27 +44,35 @@ export { isExactAvmPayload } from './types'
 
 // Constants
 export {
+  // AVM Namespaces
+  AVM_NAMESPACES,
   // CAIP-2 Network Identifiers
   ALGORAND_MAINNET_CAIP2,
   ALGORAND_TESTNET_CAIP2,
+  VOI_MAINNET_CAIP2,
   CAIP2_NETWORKS,
-  // Genesis Hashes
+  // Genesis Hashes & IDs
   ALGORAND_MAINNET_GENESIS_HASH,
   ALGORAND_TESTNET_GENESIS_HASH,
+  VOI_MAINNET_GENESIS_HASH,
+  VOI_MAINNET_GENESIS_ID,
   // V1 Network Identifiers
   V1_ALGORAND_MAINNET,
   V1_ALGORAND_TESTNET,
+  V1_VOI_MAINNET,
   V1_NETWORKS,
   V1_TO_CAIP2,
   CAIP2_TO_V1,
-  // USDC Configuration
+  // Stablecoin Configuration
   USDC_MAINNET_ASA_ID,
   USDC_TESTNET_ASA_ID,
+  AUSDC_VOI_MAINNET_ID,
   USDC_DECIMALS,
   USDC_CONFIG,
   // Algod Endpoints
   DEFAULT_ALGOD_MAINNET,
   DEFAULT_ALGOD_TESTNET,
+  DEFAULT_ALGOD_VOI_MAINNET,
   NETWORK_TO_ALGOD,
   // Transaction Limits
   MAX_ATOMIC_GROUP_SIZE,
@@ -85,9 +94,12 @@ export {
   getSenderFromTransaction,
   convertToTokenAmount,
   convertFromTokenAmount,
+  extractGenesisHashFromCaip2,
   getNetworkFromCaip2,
+  isAvmNetwork,
   isAlgorandNetwork,
   isTestnetNetwork,
+  isVoiMainnetNetwork,
   v1ToCaip2,
   caip2ToV1,
   getGenesisHashFromTransaction,

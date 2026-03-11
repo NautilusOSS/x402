@@ -74,8 +74,9 @@ export function registerExactAvmScheme(client: x402Client, config: AvmClientConf
       client.register(network, scheme)
     })
   } else {
-    // Register wildcard for all Algorand networks
+    // Register wildcard for all AVM-compatible networks
     client.register('algorand:*', scheme)
+    client.register('voi:*', scheme)
   }
 
   // Register all V1 networks

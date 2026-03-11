@@ -30,7 +30,13 @@ import {
 } from '@algorandfoundation/algokit-utils/transact'
 import { waitForConfirmation } from '@algorandfoundation/algokit-utils/transaction'
 import type { Network } from '@x402/core/types'
-import { ALGORAND_TESTNET_CAIP2, V1_ALGORAND_TESTNET } from './constants'
+import {
+  ALGORAND_TESTNET_CAIP2,
+  V1_ALGORAND_TESTNET,
+  VOI_MAINNET_CAIP2,
+  V1_VOI_MAINNET,
+  FALLBACK_ALGOD_VOI_MAINNET,
+} from './constants'
 
 /**
  * Client-side signer interface for Algorand wallets
@@ -147,14 +153,19 @@ export interface FacilitatorAvmSigner {
  */
 export interface FacilitatorAvmSignerConfig {
   /**
-   * Algod URL for mainnet
+   * Algod URL for Algorand Mainnet
    */
   mainnetUrl?: string
 
   /**
-   * Algod URL for testnet
+   * Algod URL for Algorand Testnet
    */
   testnetUrl?: string
+
+  /**
+   * Algod URL for Voi Mainnet
+   */
+  voiMainnetUrl?: string
 
   /**
    * Algod API token
@@ -245,6 +256,16 @@ function isTestnet(network: string): boolean {
 }
 
 /**
+ * Determines if a network identifier refers to Voi Mainnet.
+ *
+ * @param network - The network identifier (CAIP-2 or v1 format)
+ * @returns True if the network is Voi Mainnet
+ */
+function isVoiMainnet(network: string): boolean {
+  return network === VOI_MAINNET_CAIP2 || network === V1_VOI_MAINNET
+}
+
+/**
  * Creates a FacilitatorAvmSigner from a Base64-encoded private key.
  *
  * This is the recommended way to create a facilitator-side AVM signer for x402 payments.
@@ -288,6 +309,12 @@ export function toFacilitatorAvmSigner(
       }
       return AlgorandClient.testNet()
     }
+    if (isVoiMainnet(network)) {
+      const voiUrl = config?.voiMainnetUrl ?? FALLBACK_ALGOD_VOI_MAINNET
+      return AlgorandClient.fromConfig({
+        algodConfig: { server: voiUrl, token: config?.algodToken ?? '' },
+      })
+    }
     if (config?.mainnetUrl) {
       return AlgorandClient.fromConfig({
         algodConfig: { server: config.mainnetUrl, token: config.algodToken ?? '' },
@@ -296,11 +323,11 @@ export function toFacilitatorAvmSigner(
     return AlgorandClient.mainNet()
   }
 
-  // Cache AlgorandClient instances per network
+  // Cache AlgorandClient instances per network class
   const clientCache = new Map<string, ReturnType<typeof AlgorandClient.testNet>>()
 
   const getClient = (network: string) => {
-    const key = isTestnet(network) ? 'testnet' : 'mainnet'
+    const key = isTestnet(network) ? 'testnet' : isVoiMainnet(network) ? 'voi-mainnet' : 'mainnet'
     let client = clientCache.get(key)
     if (!client) {
       client = getAlgorandClientForNetwork(network)
