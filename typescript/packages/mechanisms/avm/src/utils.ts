@@ -1,8 +1,9 @@
 /**
- * AVM (Algorand) Utilities for x402 Payment Protocol
+ * AVM Utilities for x402 Payment Protocol
  *
  * Provides utility functions for Algod client creation, transaction encoding/decoding,
  * address validation, and network identification.
+ * Supports all AVM-compatible networks (Algorand, Voi).
  */
 
 import {
@@ -13,11 +14,15 @@ import { isValidAddress } from '@algorandfoundation/algokit-utils/common'
 import {
   ALGORAND_MAINNET_GENESIS_HASH,
   ALGORAND_TESTNET_GENESIS_HASH,
+  VOI_MAINNET_GENESIS_HASH,
   ALGORAND_TESTNET_CAIP2,
+  VOI_MAINNET_CAIP2,
   V1_ALGORAND_MAINNET,
   V1_ALGORAND_TESTNET,
+  V1_VOI_MAINNET,
   V1_TO_CAIP2,
   CAIP2_TO_V1,
+  AVM_NAMESPACES,
 } from './constants'
 
 /**
@@ -141,19 +146,37 @@ export function convertFromTokenAmount(atomicAmount: string | bigint, decimals: 
 }
 
 /**
- * Gets the network type from a CAIP-2 identifier
+ * Extracts the genesis hash from a CAIP-2 network identifier.
+ * Works for any supported AVM namespace (algorand, voi).
+ *
+ * @param caip2 - CAIP-2 network identifier (e.g. "algorand:<hash>" or "voi:<hash>")
+ * @returns The genesis hash portion, or null if not a recognized AVM CAIP-2 identifier
+ */
+export function extractGenesisHashFromCaip2(caip2: string): string | null {
+  const colonIndex = caip2.indexOf(':')
+  if (colonIndex === -1) return null
+
+  const namespace = caip2.slice(0, colonIndex)
+  if (!(AVM_NAMESPACES as readonly string[]).includes(namespace)) return null
+
+  return caip2.slice(colonIndex + 1)
+}
+
+/**
+ * Gets the network type from a CAIP-2 identifier.
+ * Supports all AVM-compatible networks (Algorand, Voi).
  *
  * @param caip2 - CAIP-2 network identifier
  * @returns Network type ("mainnet" | "testnet") or null if unknown
  */
 export function getNetworkFromCaip2(caip2: string): 'mainnet' | 'testnet' | null {
-  if (!caip2.startsWith('algorand:')) {
-    return null
-  }
+  const genesisHash = extractGenesisHashFromCaip2(caip2)
+  if (!genesisHash) return null
 
-  const genesisHash = caip2.slice('algorand:'.length)
-
-  if (genesisHash === ALGORAND_MAINNET_GENESIS_HASH) {
+  if (
+    genesisHash === ALGORAND_MAINNET_GENESIS_HASH ||
+    genesisHash === VOI_MAINNET_GENESIS_HASH
+  ) {
     return 'mainnet'
   }
   if (genesisHash === ALGORAND_TESTNET_GENESIS_HASH) {
@@ -164,18 +187,39 @@ export function getNetworkFromCaip2(caip2: string): 'mainnet' | 'testnet' | null
 }
 
 /**
- * Checks if a network identifier is an Algorand network
+ * Checks if a network identifier belongs to a supported AVM-compatible network.
+ * Recognizes both CAIP-2 format (algorand:*, voi:*) and V1 aliases.
+ *
+ * @param network - Network identifier (CAIP-2 or V1 format)
+ * @returns True if the network is a supported AVM network
+ */
+export function isAvmNetwork(network: string): boolean {
+  // Check CAIP-2 format against all supported namespaces
+  const colonIndex = network.indexOf(':')
+  if (colonIndex !== -1) {
+    const namespace = network.slice(0, colonIndex)
+    return (AVM_NAMESPACES as readonly string[]).includes(namespace)
+  }
+
+  // Check V1 format
+  return (
+    network === V1_ALGORAND_MAINNET ||
+    network === V1_ALGORAND_TESTNET ||
+    network === V1_VOI_MAINNET
+  )
+}
+
+/**
+ * Checks if a network identifier is an Algorand network.
+ * Kept for backward compatibility — prefer {@link isAvmNetwork} for new code.
  *
  * @param network - Network identifier (CAIP-2 or V1 format)
  * @returns True if the network is an Algorand network
  */
 export function isAlgorandNetwork(network: string): boolean {
-  // Check CAIP-2 format
   if (network.startsWith('algorand:')) {
     return true
   }
-
-  // Check V1 format
   return network === V1_ALGORAND_MAINNET || network === V1_ALGORAND_TESTNET
 }
 
@@ -187,6 +231,16 @@ export function isAlgorandNetwork(network: string): boolean {
  */
 export function isTestnetNetwork(network: string): boolean {
   return network === ALGORAND_TESTNET_CAIP2 || network === V1_ALGORAND_TESTNET
+}
+
+/**
+ * Checks if a network identifier refers to Voi Mainnet
+ *
+ * @param network - Network identifier (CAIP-2 or V1 format)
+ * @returns True if the network is Voi Mainnet
+ */
+export function isVoiMainnetNetwork(network: string): boolean {
+  return network === VOI_MAINNET_CAIP2 || network === V1_VOI_MAINNET
 }
 
 /**

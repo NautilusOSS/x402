@@ -20,8 +20,8 @@ import type {
 import type { ClientAvmSigner, ClientAvmConfig } from '../../signer'
 import type { ExactAvmPayloadV2 } from '../../types'
 import { encodeTransaction } from '../../utils'
-import { USDC_CONFIG } from '../../constants'
-import { isTestnetNetwork } from '../../utils'
+import { DEFAULT_ALGOD_VOI_MAINNET, NETWORK_TO_ALGOD, USDC_CONFIG } from '../../constants'
+import { isTestnetNetwork, isVoiMainnetNetwork } from '../../utils'
 
 /**
  * AVM client implementation for the Exact payment scheme.
@@ -61,7 +61,13 @@ export class ExactAvmScheme implements SchemeNetworkClient {
         },
       })
     }
-    // Auto-detect network
+    if (isVoiMainnetNetwork(network)) {
+      const server = NETWORK_TO_ALGOD[network] ?? DEFAULT_ALGOD_VOI_MAINNET
+      return AlgorandClient.fromConfig({
+        algodConfig: { server, token: '' },
+      })
+    }
+    // Algorand mainnet / testnet
     return isTestnetNetwork(network) ? AlgorandClient.testNet() : AlgorandClient.mainNet()
   }
 
