@@ -32,6 +32,11 @@ import {
   convertFromTokenAmount,
   isExactAvmPayload,
   ExactNetworkAvmScheme,
+  ExactArc200AvmScheme,
+  ARC200_TRANSFER_SELECTOR,
+  ARC200_TRANSFER_METHOD_SIG,
+  WAD_VOI_MAINNET_ID,
+  ARC200_DEFAULT_TOKEN_CONFIG,
 } from '../../src'
 
 describe('@x402/avm', () => {
@@ -353,8 +358,45 @@ describe('@x402/avm', () => {
     })
 
     it('should have scheme name exact-network', () => {
-      // Verify scheme name without instantiating (needs signer)
       expect(ExactNetworkAvmScheme.prototype).toBeDefined()
+    })
+  })
+
+  describe('ARC-200 constants', () => {
+    it('should export ARC200_TRANSFER_SELECTOR as 4-byte Uint8Array', () => {
+      expect(ARC200_TRANSFER_SELECTOR).toBeInstanceOf(Uint8Array)
+      expect(ARC200_TRANSFER_SELECTOR.length).toBe(4)
+      expect(Buffer.from(ARC200_TRANSFER_SELECTOR).toString('hex')).toBe('da7025b9')
+    })
+
+    it('should export ARC200_TRANSFER_METHOD_SIG', () => {
+      expect(ARC200_TRANSFER_METHOD_SIG).toBe('arc200_transfer(address,uint256)bool')
+    })
+
+    it('should export WAD_VOI_MAINNET_ID', () => {
+      expect(WAD_VOI_MAINNET_ID).toBe('47138068')
+    })
+
+    it('should have ARC200_DEFAULT_TOKEN_CONFIG for Voi mainnet with WAD', () => {
+      const config = ARC200_DEFAULT_TOKEN_CONFIG[VOI_MAINNET_CAIP2]
+      expect(config).toBeDefined()
+      expect(config.contractId).toBe('47138068')
+      expect(config.name).toBe('WAD')
+      expect(config.decimals).toBe(6)
+    })
+
+    it('should not have ARC200_DEFAULT_TOKEN_CONFIG for Algorand mainnet', () => {
+      expect(ARC200_DEFAULT_TOKEN_CONFIG[ALGORAND_MAINNET_CAIP2]).toBeUndefined()
+    })
+  })
+
+  describe('ExactArc200AvmScheme', () => {
+    it('should export the client scheme class', () => {
+      expect(ExactArc200AvmScheme).toBeDefined()
+    })
+
+    it('should have scheme name exact-arc200', () => {
+      expect(ExactArc200AvmScheme.prototype).toBeDefined()
     })
   })
 })

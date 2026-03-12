@@ -25,6 +25,9 @@ export { ExactAvmScheme } from './exact'
 // Exact-network scheme client (native token transfers)
 export { ExactNetworkAvmScheme } from './exact-network'
 
+// Exact-arc200 scheme client (ARC-200 smart contract token transfers)
+export { ExactArc200AvmScheme } from './exact-arc200/client'
+
 // Signer helpers and interfaces
 export {
   isAvmSignerWallet,
@@ -85,6 +88,11 @@ export {
   NATIVE_TOKEN_ASSET_ID,
   NATIVE_TOKEN_DECIMALS,
   NATIVE_TOKEN_CONFIG,
+  // ARC-200 Token Configuration
+  ARC200_TRANSFER_SELECTOR,
+  ARC200_TRANSFER_METHOD_SIG,
+  WAD_VOI_MAINNET_ID,
+  ARC200_DEFAULT_TOKEN_CONFIG,
   // Algod Endpoints
   DEFAULT_ALGOD_MAINNET,
   DEFAULT_ALGOD_TESTNET,
