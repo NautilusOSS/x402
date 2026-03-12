@@ -149,6 +149,36 @@
         "types": "./dist/cjs/exact-network/facilitator/index.d.ts",
         "default": "./dist/cjs/exact-network/facilitator/index.js"
       }
+    },
+    "./exact-arc200/client": {
+      "import": {
+        "types": "./dist/esm/exact-arc200/client/index.d.mts",
+        "default": "./dist/esm/exact-arc200/client/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/exact-arc200/client/index.d.ts",
+        "default": "./dist/cjs/exact-arc200/client/index.js"
+      }
+    },
+    "./exact-arc200/server": {
+      "import": {
+        "types": "./dist/esm/exact-arc200/server/index.d.mts",
+        "default": "./dist/esm/exact-arc200/server/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/exact-arc200/server/index.d.ts",
+        "default": "./dist/cjs/exact-arc200/server/index.js"
+      }
+    },
+    "./exact-arc200/facilitator": {
+      "import": {
+        "types": "./dist/esm/exact-arc200/facilitator/index.d.mts",
+        "default": "./dist/esm/exact-arc200/facilitator/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/exact-arc200/facilitator/index.d.ts",
+        "default": "./dist/cjs/exact-arc200/facilitator/index.js"
+      }
     }
   },
   "files": [

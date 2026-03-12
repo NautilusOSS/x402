@@ -214,6 +214,55 @@ export const NATIVE_TOKEN_CONFIG: Record<string, { name: string; decimals: numbe
 }
 
 // ============================================================================
+// ARC-200 Token Configuration
+//
+// Used by the exact-arc200 scheme for ARC-200 smart contract token transfers.
+// ARC-200 is the AVM equivalent of ERC-20 — transfers are application calls
+// to the token contract's arc200_transfer(address,uint256)bool method.
+// ============================================================================
+
+/**
+ * ARC-4 method selector for arc200_transfer(address,uint256)bool.
+ * First 4 bytes of SHA-512/256("arc200_transfer(address,uint256)bool") = 0xda7025b9
+ */
+export const ARC200_TRANSFER_SELECTOR = new Uint8Array([0xda, 0x70, 0x25, 0xb9])
+
+/**
+ * ARC-4 method signature for the ARC-200 transfer function.
+ */
+export const ARC200_TRANSFER_METHOD_SIG = 'arc200_transfer(address,uint256)bool'
+
+/**
+ * WAD (Whale Asset Dollar) ARC-200 contract ID on Voi Mainnet.
+ * Voi-native stablecoin issued by DorkFi.
+ */
+export const WAD_VOI_MAINNET_ID = '47138068'
+
+/**
+ * Default ARC-200 stablecoin configuration per network.
+ * Maps network identifiers to the default ARC-200 stablecoin for Money price conversion.
+ *
+ * - Voi mainnet: WAD (Whale Asset Dollar), an ARC-200 stablecoin.
+ *   (Note: aUSDC on Voi is an ASA handled by the `exact` scheme, not ARC-200.)
+ * - Algorand: No default. Provide explicit AssetAmount or register a MoneyParser.
+ */
+export const ARC200_DEFAULT_TOKEN_CONFIG: Record<
+  string,
+  { contractId: string; name: string; decimals: number }
+> = {
+  [VOI_MAINNET_CAIP2]: {
+    contractId: WAD_VOI_MAINNET_ID,
+    name: 'WAD',
+    decimals: USDC_DECIMALS,
+  },
+  [V1_VOI_MAINNET]: {
+    contractId: WAD_VOI_MAINNET_ID,
+    name: 'WAD',
+    decimals: USDC_DECIMALS,
+  },
+}
+
+// ============================================================================
 // Algod API Endpoints
 // ============================================================================
 

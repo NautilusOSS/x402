@@ -12,6 +12,9 @@ const baseConfig = {
     'exact-network/client/index': 'src/exact-network/client/index.ts',
     'exact-network/server/index': 'src/exact-network/server/index.ts',
     'exact-network/facilitator/index': 'src/exact-network/facilitator/index.ts',
+    'exact-arc200/client/index': 'src/exact-arc200/client/index.ts',
+    'exact-arc200/server/index': 'src/exact-arc200/server/index.ts',
+    'exact-arc200/facilitator/index': 'src/exact-arc200/facilitator/index.ts',
   },
   dts: {
     resolve: true,
